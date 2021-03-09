@@ -23,53 +23,69 @@ FPS = 60
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
+# gravity constant
 G = 0.9
 
+# mass of ball
 m = 400
 
-r = 100
+# length of arm
+r = 200
 
+# starting angle
 a = math.pi/2
 
+# velocity
 v = 0
 
+# acceleration
 aa = 0
 
+# points for tracing
 points = []
 
+# where pendulum will be attatched
 startPos = (int(WIDTH / 2), int(HEIGHT / 2))
 xoff, yoff = startPos
 
 running = True
 
 while running:
+    # dampening - more realistic stops it going for ever
     #v *= 0.9996
+
+    # clearing screen
     win.fill(BLACK)
+    # ticking FPS
     clock.tick(FPS)
+    # clicks x button
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
+    # calculating angular acceration
     aa = -G * math.sin(a) / r
+    # updating velocity
     v += aa
+    # updating angle
     a += v
 
-
-    x = float(r * math.sin(a)+xoff)
-    y = float(r * math.cos(a)+yoff)
+    
+    x = r * math.sin(a)+xoff
+    y = r * math.cos(a)+yoff
 
     points.append((x, y))
 
+    # drawing pendulum
     pygame.draw.line(win, WHITE, startPos, (x, y), 6)
     pygame.draw.circle(win, WHITE, (int(x), int(y)), int(m / 10))
 
+    # drawing path
     if len(points) > 2:
         pygame.draw.lines(win, WHITE, False, points)
 
     pygame.display.update()
     
-    r += 0.5
 
     
 pygame.quit()
-
