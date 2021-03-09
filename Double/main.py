@@ -42,9 +42,9 @@ def ang_acc_1(m1, m2, L1, L2, a1, a2, v1, v2):
 def ang_acc_2(m1, m2, L1, L2, a1, a2, v1, v2):
 
     num1 = 2 * math.sin(a1 - a2)
-    num2 = (v1 * v1) * L1 * (m1 + m2) + G * (m1+ m2) * math.cos(a1)
-    num3 = (v2 * v2) * L2 * m2 * math.cos(a1-a2)
-    numerator = num1 * (num2 + num3)
+    num2 = (v1 * v1) * L1 * (m1 + m2) + G * (m1+ m2) * math.cos(a1) + (v2 * v2) * L2 * m2 * math.cos(a1-a2)
+
+    numerator = num1 * num2
     
     denominator = L2 * (2 * m1 + m2 - m2 * math.cos(2 * a1 - 2 * a2))
 
@@ -80,7 +80,7 @@ v2 = 0
 aa1 = 0
 aa2 = 0
 
-
+# used for tracing path
 points2 = []
 
 startPos = (int(WIDTH/2) , int(HEIGHT/4))
@@ -90,15 +90,20 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    
+
+    # clearing the screen
     win.fill(BLACK)
     delta = clock.tick(FPS) / 1000
+
+    # calculating angular acceleration
     aa1 = ang_acc_1(m1, m2, L1, L2, a1, a2, v1, v2)
     aa2 = ang_acc_2(m1, m2, L1, L2, a1, a2, v1, v2)
-    
+
+    # calculating angular velocity based on angular acceleration
     v1 += aa1
     v2 += aa2
 
+    # updating angle based on velocity
     a1 += v1
     a2 += v2
 
@@ -129,5 +134,3 @@ while running:
     
 
 #pygame.quit()
-
-
